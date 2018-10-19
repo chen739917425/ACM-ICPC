@@ -25,7 +25,7 @@ int match(char* a,char* b)
 			if (j==m)
 			{
 				cnt++;
-				j=ne[i-1]+1;
+				j=ne[j-1]+1;
 			}
 		}
 		else
@@ -33,7 +33,7 @@ int match(char* a,char* b)
 			if (j==0)
 				++i;
 			else
-				j=ne[i-1]+1;
+				j=ne[j-1]+1;
 		}
 	}
 	return cnt;
