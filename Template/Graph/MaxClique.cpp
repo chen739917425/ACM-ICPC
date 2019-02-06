@@ -1,6 +1,6 @@
 bool e[maxn][maxn];
 int n,ans,cnt[maxn],vis[maxn],clique[maxn];
-bool dfs(int u,int dep) 
+bool dfs(int u,int dep)
 {
     for(int v=u+1;v<=n;++v)
 	{
