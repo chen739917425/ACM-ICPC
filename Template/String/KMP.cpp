@@ -9,9 +9,9 @@ void init(char *s)
 		while (s[j+1]!=s[i]&&j>=0)
 			j=ne[j];
 		if (s[j+1]==s[i])
-			nt[i]=j+1;
+			ne[i]=j+1;
 		else
-			nt[i]=-1;
+			ne[i]=-1;
 	}
 }
 int match(char* a,char* b)
