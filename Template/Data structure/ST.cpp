@@ -1,6 +1,8 @@
 int mn[maxn][32],mx[maxn][32],a[maxn];
 void init(int n)
 {
+	for (int i=2;i<=n;++i)
+		lg[i]=lg[i-1]+(i==(i&-i));
 	for (int i=1;i<=n;++i)
 		mn[i][0]=mx[i][0]=a[i];
 	for (int j=1;(1<<j)<=n;++j)
@@ -14,11 +16,11 @@ void init(int n)
 }
 inline int mx_qry(int l,int r)
 {
-	int k=log(double(r-l+1))/log(2.0);
+	int k=lg[r-l+1];
 	return max(mx[l][k],mx[r-(1<<k)+1][k]);
 }
 inline int mn_qry(int l,int r)
 {
-	int k=log(double(r-l+1))/log(2.0);
+	int k=lg[r-l+1];
 	return min(mn[l][k],mn[r-(1<<k)+1][k]);
 }

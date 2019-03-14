@@ -1,9 +1,8 @@
 /*multiply*/
-int fa[maxn][32],deep[maxn],in[maxn];
+int fa[maxn][32],deep[maxn];
 V G[maxn];
 void init(int n)
 {
-	Clear(in,0);
 	for (int i=0;i<=n;++i)
 		G[i].clear();
 }
@@ -13,8 +12,7 @@ void dfs(int u,int f,int d)
 	deep[u]=d;
 	for (int i=1;i<=20;++i)
 		fa[u][i]=fa[fa[u][i-1]][i-1];
-	int sz=G[u].size();
-	for (int i=0;i<sz;++i)
+	for (int i=0;i<sz(G[u]);++i)
 	{
 		int v=G[u][i];
 		if (v!=f)
@@ -41,7 +39,7 @@ int lca(int x,int y)
 	return fa[x][0];
 }
 /*RMQ*/
-int head[maxn],deep[maxn<<1],num[maxn<<1],pos[maxn<<1],ST[maxn<<1][32],cnt,tot;
+int head[maxn],deep[maxn<<1],num[maxn<<1],pos[maxn<<1],ST[maxn<<1][32],lg[maxn],cnt,tot;
 struct Edge
 {
 	int v,ne;
@@ -56,7 +54,6 @@ void init()
 {
 	tot=0;
 	cnt=0;
-	Clear(ans,0);
 	Clear(head,0);
 	Clear(pos,0);
 }
@@ -74,6 +71,8 @@ void dfs(int u,int d)
 }
 void ST_init(int n)
 {
+	for (int i=2;i<=n;++i)
+		lg[i]=lg[i-1]+(i==(i&-i));	
 	for (int i=1;i<=n;++i)
 		ST[i][0]=num[i];
 	for (int j=1;(1<<j)<=n;++j)
@@ -85,7 +84,7 @@ void ST_init(int n)
 }
 inline int qry(int l,int r)
 {
-	int k=log(double(r-l+1))/log(2.0);
+	int k=lg[r-l+1];
 	int u=ST[l][k],v=ST[r-(1<<k)+1][k];
 	return deep[u]<deep[v]?u:v;
 }
@@ -102,7 +101,7 @@ bool vis[maxn];
 struct qry
 {
 	int v,id;
-	qry(int a,int b,int c):u(a),v(b),id(c){}
+	qry(int a,int b):v(a),id(b){}
 };
 vector<qry> q[maxn];
 int find(int x)
@@ -112,8 +111,7 @@ int find(int x)
 void tarjan(int u)
 {
 	vis[u]=1;
-	int sz=a[u].size();
-	for (int i=0;i<sz;++i)
+	for (int i=0;i<sz(q[u]);++i)
 	{
 		int v=q[u][i].v,id=q[u][i].id;
 		if (vis[v])
