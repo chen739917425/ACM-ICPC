@@ -1,10 +1,11 @@
 /*
-	A^B%C=A^(B%phi(C)+phi(C))%C
+	A^B%C =	A^(B%phi(C)), if (gcd(A,C)=1)
+			A^(B%phi(C)+phi(C))%C, if (B>=phi(C))
 	x^phi(p)กิ1(mod p) -> inv[x]=x^(phi(p)-1)
 */
-ll phi(ll n)//get phi(n)
+int phi(int n)//get phi(n)
 {
-    ll res=n;
+    int res=n;
     for (int i=2;i*i<=n;++i)
     {
         if (n%i==0)
@@ -17,29 +18,53 @@ ll phi(ll n)//get phi(n)
     return res;
 }
 
-ll phi[maxn],prime[maxn],pre[maxn];//make Euler_table
-bool sign[maxn];
-void phi_init()
+vector<int> prime;
+bool vis[maxn];
+int phi[maxn];
+void phi_init() //make Euler_table
 {
-	int cnt=0;
 	phi[1]=1;
 	for (int i=2;i<maxn;++i)
 	{
-		if (!sign[i])
+		if (!vis[i])
 		{
-			prime[cnt++]=i;
+			prime.pb(i);
 			phi[i]=i-1;
 		}
-		for (int j=0;j<cnt&&i*prime[j]<maxn;++j)
+		for (int j=0;j<sz(prime)&&ll(i)*prime[j]<maxn;++j)
 		{
-			sign[i*prime[j]]=1;
-			if (i%prime[j]==0)
+			int t=i*prime[j];
+			vis[t]=1;
+			if (i%prime[j])
+				phi[t]=phi[i]*(prime[j]-1);
+			else
 			{
-				phi[i*prime[j]]=prime[j]*phi[i];
+				phi[t]=prime[j]*phi[i];
 				break;
 			}
+		}
+	}
+}
+
+int mu[maxn];
+void mu_init() //make Mobius_table
+{
+	mu[1]=1;
+	for (int i=2;i<maxn;++i)
+	{
+		if (!vis[i])
+			prime.pb(i),mu[i]=-1;
+		for (int j=0;j<sz(prime)&&ll(i)*prime[j]<maxn;++j)
+		{
+			int t=i*prime[j];
+			vis[t]=1;
+			if (i%prime[j])
+				mu[t]=-mu[i];
 			else
-				phi[i*prime[j]]=phi[i]*(prime[j]-1);
+			{
+				mu[t]=0;
+				break;
+			}
 		}
 	}
 }
