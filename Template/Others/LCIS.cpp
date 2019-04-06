@@ -1,7 +1,6 @@
 int LCIS(int* a,int* b,int n£¬int m)
 {
 	Clear(dp,0);
-	int ans=0;
 	for (int i=0;i<n;++i)
 	{
 		int mx=0;
@@ -13,5 +12,5 @@ int LCIS(int* a,int* b,int n£¬int m)
 				dp[j]=mx+1;
 		}
 	}
-	return ans;
+	return *max_element(dp,dp+m);
 }
