@@ -1,7 +1,7 @@
 struct Trie_01
 {
     static const int maxn=1e5+10,N = 32*maxn,M = 2;
-    int node[N][M],value[N],rt,L; //value  记录对应节点的值，用于返回
+    int node[N][M],value[N],rt,L; //value  璁板綍瀵瑰簲鑺傜偣鐨勫�硷紝鐢ㄤ簬杩斿洖
     void init()
     { 
         fill_n(node[N-1],M,0);

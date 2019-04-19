@@ -1,4 +1,4 @@
-//  µ¥µãĞŞ¸Ä,Çø¼äÑ¯ÎÊ
+//  å•ç‚¹ä¿®æ”¹,åŒºé—´è¯¢é—®
 inline void push_up(int rt)
 {
 	sum[rt]=sum[rt<<1]+sum[rt<<1|1];
@@ -42,7 +42,7 @@ int query(int L,int R,int l,int r,int rt)
 	return res;
 }
 
-//  ³É¶ÎĞŞ¸Ä,Çø¼äÑ¯ÎÊ 
+//  æˆæ®µä¿®æ”¹,åŒºé—´è¯¢é—® 
 void lazy(int rt,int v,int len)
 {
 	add[rt]+=v;
@@ -102,7 +102,7 @@ ll query(int L,int R,int l,int r,int rt)
 	return res;
 }
 
-//  É¨ÃèÏß(Ãæ»ı2´Î¡¢3´Î½»)
+//  æ‰«æçº¿(é¢ç§¯2æ¬¡ã€3æ¬¡äº¤)
 inline void push_up(int l,int r,int rt)
 {
 	if (cnt[rt]>2)

@@ -1,4 +1,4 @@
-// kÎ¬¿Õ¼äÏÂn¸öµãµÄ×îÔ¶ Manhattan ¾àÀë 
+// kç»´ç©ºé—´ä¸‹nä¸ªç‚¹çš„æœ€è¿œ Manhattan è·ç¦» 
 ll max_Manhattan(ll p[][10],int n,int k)
 {
 	ll ans=0;

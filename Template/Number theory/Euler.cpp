@@ -1,7 +1,7 @@
 /*
 	A^B%C =	A^(B%phi(C)), if (gcd(A,C)=1)
 			A^(B%phi(C)+phi(C))%C, if (B>=phi(C))
-	x^phi(p)¡Ô1(mod p) -> inv[x]=x^(phi(p)-1)
+	x^phi(p)à¸à¸´1(mod p) -> inv[x]=x^(phi(p)-1)
 */
 int phi(int n)//get phi(n)
 {

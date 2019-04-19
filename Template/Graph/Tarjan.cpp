@@ -1,4 +1,4 @@
-// ÓĞÏòÍ¼Ç¿Á¬Í¨·ÖÁ¿ 
+// æœ‰å‘å›¾å¼ºè¿é€šåˆ†é‡ 
 int dfn[maxn],low[maxn],sign[maxn],num,tim;
 bool ins[maxn];
 stack<int> s;
@@ -32,7 +32,7 @@ void tarjan(int u)
 		ins[u]=0;
 	}
 }
-// ÎŞÏòÍ¼Çó¸îÓëÇÅ
+// æ— å‘å›¾æ±‚å‰²ä¸æ¡¥
 int dfn[maxn],low[maxn],tim,root,rtson;
 vector<int> G[maxn],cutvex;
 vector<P> bridge;
@@ -62,7 +62,7 @@ void tarjan(int u,int fa)// for (i=1;i<=n;++i) if (!dfn[i]) root=i,rtson=0,tarja
 	if(u!=root&&isCut)	
 		cutvex.pb(u);
 } 
-// ÎŞÏòÍ¼µãË«Á¬Í¨·ÖÁ¿ bcc 
+// æ— å‘å›¾ç‚¹åŒè¿é€šåˆ†é‡ bcc 
 struct edge
 {
 	int v,ne;
@@ -115,7 +115,7 @@ void tarjan(int u)
 			low[u]=min(low[u],dfn[v]);
 	}
 }
-// ÎŞÏòÍ¼±ßË«Á¬Í¨·ÖÁ¿ ebc 
+// æ— å‘å›¾è¾¹åŒè¿é€šåˆ†é‡ ebc 
 int head[maxn],dfn[maxn],low[maxn],cnt,num,tim;
 stack<int> s; 
 vector<int> ebcv[maxn];

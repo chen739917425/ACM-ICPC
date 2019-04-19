@@ -20,7 +20,7 @@ struct Fenwick
         	for (int j=y;j<maxn;j+=j&-j)
         		fw[i][j]+=c;
     }
-    int qry(int x,int y) //ÇóÇ°×º¾ØÐÎºÍ 
+    int qry(int x,int y) //æ±‚å‰ç¼€çŸ©å½¢å’Œ 
     {
         int res=0;
         for (int i=x;i;i-=i&-i)
@@ -29,11 +29,11 @@ struct Fenwick
         return res;
     }
 };
-// ³É¶ÎÐÞ¸Ä£¬µ¥µãÇóÖµ(Î¬»¤²î·ÖÊý×é£© 
-// 1Î¬
+// æˆæ®µä¿®æ”¹ï¼Œå•ç‚¹æ±‚å€¼(ç»´æŠ¤å·®åˆ†æ•°ç»„ï¼‰ 
+// 1ç»´
 add(p,c),add(p+1,-c);
-qry(p); //µãpµÄÖµ 
-// 2Î¬
+qry(p); //ç‚¹pçš„å€¼ 
+// 2ç»´
 add(x1,y1,c),add(x2+1,y2+1,c);
 add(x1,y2+1,-c),add(x2+1,y1,-c);
-qry(x,y); //(x,y)µÄÖµ 
+qry(x,y); //(x,y)çš„å€¼ 

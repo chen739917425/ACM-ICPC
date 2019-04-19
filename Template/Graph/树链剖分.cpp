@@ -137,22 +137,22 @@ int main()
     {
         int op,x,y,z;
         scanf("%d",&op);
-        if (op==1) //  路径修改 
+        if (op==1) //  璺緞淇敼 
         {
             scanf("%d%d%d",&x,&y,&z);
             upd_path(x,y,z);
         }
-        else if (op==2) //  路径求和 
+        else if (op==2) //  璺緞姹傚拰 
         {
             scanf("%d%d",&x,&y);
             printf("%d\n",qry_path(x,y));
         }
-        else if (op==3) //  子树修改 
+        else if (op==3) //  瀛愭爲淇敼 
         {
             scanf("%d%d",&x,&z);
             upd(id[x],id[x]+sz[x]-1,z,1,tot,1);
         }
-        else //  子树求和 
+        else //  瀛愭爲姹傚拰 
         {
             scanf("%d",&x);
             printf("%d\n",qry(id[x],id[x]+sz[x]-1,0,1,tot,1));

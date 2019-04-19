@@ -1,4 +1,4 @@
-int LCIS(int* a,int* b,int n£¬int m)
+int LCIS(int* a,int* b,int nï¼Œint m)
 {
 	Clear(dp,0);
 	for (int i=0;i<n;++i)
