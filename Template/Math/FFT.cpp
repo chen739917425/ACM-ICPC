@@ -14,10 +14,10 @@ void init(int n)
 		w[0][i]=w[1][i]=cp(cos(2*pi*i/n),sin(2*pi*i/n)),w[1][i].imag(-w[0][i].imag());
 	}
 }
-void fft(cp*a,int n,int f=0)	// f=0 => DFT, f=1 => IDFT
+void fft(cp* a,int n,int f=0)	// f=0 => DFT, f=1 => IDFT
 {
 	cp c;
-	for (int i=0; i<n; i++)
+	for (int i=0;i<n;i++)
 		if (i<rev[i]) 
 			swap(a[i],a[rev[i]]);
 	for (int l=2;l<=n;l<<=1)
