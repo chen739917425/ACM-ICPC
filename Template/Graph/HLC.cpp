@@ -1,15 +1,15 @@
-int root,p,tot,son[maxn],id[maxn],rk[maxn],top[maxn],sz[maxn],dep[maxn],f[maxn];
-void dfs1(int fa,int u,int deep)
+int root,tot,son[maxn],id[maxn],rk[maxn],top[maxn],sz[maxn],dep[maxn],f[maxn];
+void dfs1(int fa,int u)
 {
     f[u]=fa;
-    dep[u]=deep;
+    dep[u]=dep[fa]+1;
     sz[u]=1;
     for (int i=head[u];i;i=edge[i].ne)
     {
         int v=edge[i].v;
         if (v==fa)
             continue;
-        dfs1(u,v,deep+1);
+        dfs1(u,v);
         sz[u]+=sz[v];
         if (sz[v]>sz[son[u]])
             son[u]=v;
@@ -73,54 +73,30 @@ int qry(int L,int R,int add,int l,int r,int rt)
 }
 void upd_path(int x,int y,int z)
 {
-    int fx=top[x],fy=top[y];
-    while (fx!=fy)
-    {
-        if (dep[fx]>dep[fy])
-        {
-            upd(id[fx],id[x],z,1,tot,1);
-            x=f[fx];
-        }
-        else
-        {
-            upd(id[fy],id[y],z,1,tot,1);
-            y=f[fy];
-        }
-        fx=top[x],fy=top[y];
+    while (top[x]!=top[y]){
+        if (dep[top[x]]<dep[top[y]]) swap(x,y);
+        upd(id[top[x]],id[x],z,1,tot,1);
+        x=f[top[x]];
     }
-    if (id[x]>id[y])
-        upd(id[y],id[x],z,1,tot,1);
-    else
-        upd(id[x],id[y],z,1,tot,1);
+    if (id[x]<id[y]) swap(x,y);
+    upd(id[y],id[x],z,1,tot,1);
 }
 int qry_path(int x,int y)
 {
     int res=0;
-    int fx=top[x],fy=top[y];
-    while (fx!=fy)
-    {
-        if (dep[fx]>dep[fy])
-        {
-            res+=qry(id[fx],id[x],0,1,tot,1);
-            x=f[fx];
-        }
-        else
-        {
-            res+=qry(id[fy],id[y],0,1,tot,1);
-            y=f[fy];
-        }
-        fx=top[x],fy=top[y];
+    while (top[x]!=top[y]){
+        if (dep[top[x]]<dep[top[y]]) swap(x,y);
+        res+=qry(id[top[x]],id[x],0,1,tot,1);
+        x=f[top[x]];
     }
-    if (id[x]>id[y])
-        res+=qry(id[y],id[x],0,1,tot,1);
-    else 
-        res+=qry(id[x],id[y],0,1,tot,1);
+    if (id[x]<id[y]) swap(x,y);
+    res+=qry(id[y],id[x],0,1,tot,1);
     return res;
 }
 int main()
 {
     int n,m;
-    scanf("%d%d%d%d",&n,&m,&root,&p);
+    scanf("%d%d%d",&n,&m,&root);
     for (int i=1;i<=n;++i)
         scanf("%d",&g[i]);
     for (int i=0;i<n-1;++i)
@@ -130,7 +106,7 @@ int main()
         add(u,v);
         add(v,u);
     }
-    dfs1(0,root,1);
+    dfs1(0,root);
     dfs2(root,root);
     build(1,tot,1);
     while (m--)
