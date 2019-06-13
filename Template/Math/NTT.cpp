@@ -37,11 +37,12 @@ void ntt(int* a,int n,int f=0)	// f=0 => DFT, f=1 => IDFT
 int a[maxn],b[maxn];
 void work()
 {
-	read(a),read(b);
-	init(N);
-	ntt(a,N);
-	ntt(b,N);
-	for (int i=0;i<N;++i)
+	int n=1;
+	while (n<alen+blen)	n<<=1;
+	init(n);
+	ntt(a,n);
+	ntt(b,n);
+	for (int i=0;i<n;++i)
 		a[i]=ll(a[i])*b[i]%P;
-	ntt(a,N,1);
+	ntt(a,n,1);
 }

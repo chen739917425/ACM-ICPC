@@ -29,7 +29,6 @@ void fft(cp* a,int n,int f=0)	// f=0 => DFT, f=1 => IDFT
 cp a[maxn],b[maxn];
 void work()
 {
-	read(a),read(b);
 	int n=1;
 	while (n<alen+blen)	n<<=1;
 	init(n);
