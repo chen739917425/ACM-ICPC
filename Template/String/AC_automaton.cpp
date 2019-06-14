@@ -7,7 +7,7 @@ struct Trie
 		fail[0]=N-1;
 		for (int i=0;i<M;++i)
 			ne[N-1][i]=0;
-		Clear(cnt,0);
+		memset(cnt,0,sizeof(cnt));
 		L=0;
 		rt=newnode();
 	}
@@ -22,7 +22,7 @@ struct Trie
 		int p=rt;
 		for (int i=0;s[i];++i)
 		{
-			int c=s[i]-'A';
+			int c=s[i]-'a';
 			if (!ne[p][c])
 			{
 				ne[p][c]=newnode();
@@ -56,12 +56,7 @@ struct Trie
 		int p=rt;
 		for (int i=0;s[i];++i)
 		{
-			if (s[i]<'A'||s[i]>'Z')
-			{
-				p=rt;
-				continue;
-			}
-			int c=s[i]-'A';
+			int c=s[i]-'a';
 			while (!ne[p][c]&&p)
 				p=fail[p];
 			int tmp=p=ne[p][c];
@@ -70,6 +65,7 @@ struct Trie
 				if (cnt[tmp]!=-1)//if macth,do... 
 				{
 					
+					cnt[tmp]=-1;
 				} 
 				tmp=fail[tmp];
 			}
