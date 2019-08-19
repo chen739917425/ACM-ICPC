@@ -1,27 +1,42 @@
-int fa[maxn],r[maxn];
-void init(int n)
-{
-	for (int i=0;i<=n;++i)
-		fa[i]=i;
+// 边带权
+int fa[maxn],d[maxn]; // d[i]表示i到其父节点的距离 
+int add(int a,int b){
+	a+=b;
+	return (a%k+k)%k; // k为关系环的长度
 }
-int find(int x)
-{
+int find(int x){
 	if (fa[x]==x)
 		return x;
-	int tmp=fa[x];
-	fa[x]=find(tmp);
-	r[x]=(r[x]+r[tmp])%3;
-	return fa[x];
+	int rt=find(fa[x]);
+	d[x]=add(d[x],d[fa[x]]);
+	fa[x]=rt;
+	return rt;
 }
-int unio(int x,int y,int d)
-{
+bool unio(int x,int y,int r){
 	int fx=find(x),fy=find(y);
-	if (fx!=fy)
-	{
-		r[fy]=(d+r[x]-r[y]+3)%3;
-		fa[fy]=fx;
-		return 0;
+	if (fx==fy)
+		return add(d[x],-d[y])==r;
+	else{
+		d[fx]=add(add(r,d[y]),-d[x]);
+		fa[fx]=fy;
+		return 1;
 	}
-	else  //if fx==fy,check
-		return !((r[y]-r[x]+3)%3==d);
+}
+// 可撤销
+stack<int> s;
+void unio(int x,int y){
+	int fx=find(x),fy=find(y);
+	if (fx==fy)	continue;
+	if (sz[fx]>sz[fy])
+		swap(fx,fy);
+	fa[fx]=fy;
+	sz[fy]+=sz[fx];
+	s.push(fx);
+}
+void cancel(){
+	int fx=s.top();
+	s.pop();
+	int fy=fa[fx];
+	fa[fx]=fx;
+	sz[fy]-=sz[fx];
 }
