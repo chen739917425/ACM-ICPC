@@ -64,3 +64,32 @@ ll kth_query(int k) //若0可以被异或出来，令k--
             res^=tmp[i];
     return res;
 }
+/*  
+	支持查询区间内的 异或最值 或 可构造性，动态插入数到末尾，贪心的思想维护前缀线性基
+	可以离线 将查询的区间按r排序 内存不需要开N倍 只需要一倍
+	bs[r][i].fi 表示前缀 r 第 i 位的基 
+	bs[r][i].se 表示前缀 r 第 i 位的基由哪个位置的元素贡献
+	贪心取靠后的元素来贡献
+*/ 
+P bs[maxn][32]; 
+void insert(P p,int r){		// p = (a[r], r)
+	for (int i=0;i<=30;++i)
+		bs[r][i]=bs[r-1][i];
+	for (int i=30;i>=0;--i){
+		if ((p.fi>>i)&1){
+			if (!bs[r][i].fi){
+				bs[r][i]=p;
+				return;
+			} 
+			if (bs[r][i].se<p.se)
+				swap(bs[r][i],p);
+			p.fi^=bs[r][i].fi;
+		}
+	}
+}
+ll getMax(int l,int r,ll res=0){	// res为初始值
+	for (int i=30;i>=0;--i)
+		if (bs[r][i].se>=l&&(res^bs[r][i].fi)>res)
+			res^=bs[r][i].fi;
+	return res;
+}
