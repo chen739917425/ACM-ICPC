@@ -1,9 +1,9 @@
 /*
-	g ��ԭͼ
-	revg �淴��ͼ
-	dom[u] �� u ��֧�����ϵĸ���, ��֧�� u �ĵ����������ĵ�
-	����mark(s), sΪ���,��֧�����ĸ� 
-	���� u ��·���ϵĵ��Ϊ u ��֧��㣨��ԭͼ�� s �� u �ıؾ��㣩
+	g 存原图
+	revg 存反向图
+	dom[u] 是 u 在支配树上的父亲, 是支配 u 的点中深度最深的点
+	调用mark(s), s为起点,即支配树的根 
+	根到 u 的路径上的点均为 u 的支配点（即原图中 s 到 u 的必经点）
 */
 const int N = 1e6 + 10;
 vector<int> revg[N], g[N], buf[N], ord;
