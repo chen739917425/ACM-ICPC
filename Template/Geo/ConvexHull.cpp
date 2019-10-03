@@ -43,7 +43,8 @@ bool cmp(const P& b,const P& c){
 	if (fabs(tmp)<eps&&dis(b,p[0])<dis(c,p[0])) return 1;
 	return 0;
 }
-int graham(P* hull,P* p,int n){		// p 下标从 0 开始, 返回凸包点数, 此时p[0]为凸包左下角的点 
+// 求凸包, p 下标从 0 开始, 返回凸包点数, 此时p[0]为凸包左下角的点
+int graham(P* hull,P* p,int n){		
 	int k=0;
 	for (int i=1;i<n;++i)
 		if (sign(p[k].y-p[i].y)>0||(!sign(p[i].y-p[k].y)&&sign(p[k].x-p[i].x)>0))
@@ -59,6 +60,26 @@ int graham(P* hull,P* p,int n){		// p 下标从 0 开始, 返回凸包点数, �
 		hull[top++]=p[i];
 	}
 	return top;
+}
+/*
+	求p[l]-p[r]的上凸包
+	for (int i=1;i<=n;++i)
+		cal(i,n);
+	cost[l][r] 为p[l]-p[r]的上凸包长度
+*/
+double len[maxn],cost[maxn][maxn];
+int s[maxn],top;
+void cal(int l,int n){
+	top=0;
+	for (int i=l;i<=n;++i){
+		while (top>1&&sign(cross(p[s[top-1]],p[i],p[s[top]]))<=0) --top;
+		s[++top]=i;
+		if (top==1)
+			len[top]=0;
+		else
+			len[top]=len[top-1]+dis(p[i],p[s[top-1]]);
+		cost[l][i]=len[top];
+	}
 }
 // 求多边形面积 
 double area(P* p,int n)
