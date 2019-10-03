@@ -36,6 +36,7 @@ int inConvex(P q,P* p,int n){
 	}
 	return 0;
 }
+// 求凸包, p 下标从 0 开始, 返回凸包点数, 此时p[0]为凸包左下角的点
 P p[maxn],hull[maxn];
 bool cmp(const P& b,const P& c){
 	double tmp=cross(b,c,p[0]);
@@ -43,7 +44,6 @@ bool cmp(const P& b,const P& c){
 	if (fabs(tmp)<eps&&dis(b,p[0])<dis(c,p[0])) return 1;
 	return 0;
 }
-// 求凸包, p 下标从 0 开始, 返回凸包点数, 此时p[0]为凸包左下角的点
 int graham(P* hull,P* p,int n){		
 	int k=0;
 	for (int i=1;i<n;++i)
@@ -62,7 +62,7 @@ int graham(P* hull,P* p,int n){
 	return top;
 }
 /*
-	求p[l]-p[r]的上凸包
+	求p[l]-p[r]的上凸包, p需先按x排序
 	for (int i=1;i<=n;++i)
 		cal(i,n);
 	cost[l][r] 为p[l]-p[r]的上凸包长度
