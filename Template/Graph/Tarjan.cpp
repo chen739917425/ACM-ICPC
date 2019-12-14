@@ -117,3 +117,24 @@ void tarjan(int u)
 			low[u]=min(low[u],dfn[v]);
 	}
 }
+/*
+	点双缩点建新图, 将每个 v-DCC 与其包含的割点连边
+	对割点赋新编号, 故空间开两倍
+	多组数据时, 要初始化两倍空间
+*/
+int new_id[maxn],sz[maxn<<1];
+vector<int> E[maxn<<1];
+void build(){
+	int id=num;
+	for (int i=1;i<=n;++i)
+		if (cut[i])
+			new_id[i]=++id,sz[id]=1;
+	for (int i=1;i<=num;++i)
+		for (auto j:dcc[i])
+			if (cut[j]){
+				E[new_id[j]].pb(i);
+				E[i].pb(new_id[j]);
+			}
+			else
+				sz[i]++;
+}
