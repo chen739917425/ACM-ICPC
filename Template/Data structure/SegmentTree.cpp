@@ -101,6 +101,40 @@ ll query(int L,int R,int l,int r,int rt)
 		res+=query(L,R,rson);
 	return res;
 }
+/*
+	合并权值线段树 
+	mx为最大权值
+	初始化 id,ls,rs 为 0 
+*/ 
+int id,rt[maxn],ls[maxn*22],rs[maxn*22],mx[maxn*22];
+inline void push_up(int now){
+	mx[now]=max(mx[ls[now]],mx[rs[now]]);
+}
+void ins(int& now,int p,int l,int r){
+	if (!now)	now=++id;
+	if (l==r){
+		mx[now]++;
+		return;
+	}
+	int m=l+r>>1;
+	if (p<=m)	ins(ls[now],p,l,m);
+	else	ins(rs[now],p,m+1,r);
+	push_up(now);
+	return;
+}
+//将 y树合并到 x树 
+int merge(int x,int y,int l,int r){
+	if (!x||!y)	return x+y;
+	if (l==r){
+		mx[x]+=mx[y];
+		return x;
+	}
+	int m=l+r>>1;
+	ls[x]=merge(ls[x],ls[y],l,m);
+	rs[x]=merge(rs[x],rs[y],m+1,r);
+	push_up(x);
+	return x;
+}
 
 //  扫描线(面积2次、3次交)
 inline void push_up(int l,int r,int rt)
