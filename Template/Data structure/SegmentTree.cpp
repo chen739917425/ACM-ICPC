@@ -202,3 +202,53 @@ struct seg
 seg line[maxn];
 update(l,r-1,line[i].f,1,sz,1);
 ans+=more[1]*(line[i+1].y-line[i].y); 
+
+//扫描线(周长并)
+int cnt[maxn<<2],len[maxn<<2],num[maxn<<2],lb[maxn<<2],rb[maxn<<2];
+inline void push_up(int l,int r,int rt){
+	if (cnt[rt]){
+		len[rt]=r+1-l;
+		lb[rt]=rb[rt]=1;
+		num[rt]=2;
+	}
+	else if (l==r)
+		len[rt]=num[rt]=lb[rt]=rb[rt]=0;
+	else{
+		len[rt]=len[rt<<1]+len[rt<<1|1];
+		lb[rt]=lb[rt<<1];
+		rb[rt]=rb[rt<<1|1];
+		num[rt]=num[rt<<1]+num[rt<<1|1];
+		if (rb[rt<<1]&&lb[rt<<1|1])	num[rt]-=2;
+	}
+}			
+void upd(int L,int R,int c,int l,int r,int rt){
+	if (L<=l&&r<=R){
+		cnt[rt]+=c;
+		push_up(l,r,rt);
+		return;
+	}
+	int m=l+r>>1;
+	if (L<=m)
+		upd(L,R,c,l,m,rt<<1);
+	if (R>m)
+		upd(L,R,c,m+1,r,rt<<1|1);
+	push_up(l,r,rt);
+	return;
+} 
+struct seg{
+	int l,r,y,f;
+	seg(int a,int b,int c,int d):y(a),l(b),r(c),f(d){}
+	bool operator < (const seg& a) const{
+		return y!=a.y?y<a.y:f>a.f;
+	}
+};
+vector<seg> v;
+int ans=0,last=0;
+for (int i=0;i<sz(v);++i){
+	if (v[i].l<=v[i].r-1)
+		upd(v[i].l,v[i].r-1,v[i].f,1,N,1);
+	ans+=abs(len[1]-last);
+	last=len[1];
+	if (i<sz(v)-1)
+		ans+=num[1]*(v[i+1].y-v[i].y);
+}
