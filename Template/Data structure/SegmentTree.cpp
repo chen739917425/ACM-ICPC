@@ -136,6 +136,90 @@ int merge(int x,int y,int l,int r){
 	return x;
 }
 
+// 区间加，区间乘，区间赋值，查询区间和，区间平方和，区间立方和
+#define lson l, m, rt << 1
+#define rson m + 1, r, rt << 1 | 1
+int sum[N<<2][4], sz[N<<2], lz_a[N<<2], lz_m[N<<2], lz_s[N<<2];
+inline void Add(int rt, int val) {
+    lz_a[rt] = add(lz_a[rt], val);
+    int sum1 = sum[rt][1], sum2 = sum[rt][2], sum3 = sum[rt][3];
+    int val2 = mul(val, val), val3 = mul(val, val2);
+    sum[rt][1] = add(sum1, mul(sz[rt], val));
+    sum[rt][2] = add(sum2, add(mul(2ll * sum1, val), mul(sz[rt], val2)));
+    sum[rt][3] = add(sum3, mul(sz[rt], val3));
+    sum[rt][3] = add(sum[rt][3], add(mul(3ll * sum1, val2), mul(3ll * sum2, val)));
+}
+inline void Mul(int rt, int val) {
+    lz_m[rt] = mul(lz_m[rt], val);
+    if (lz_a[rt]) lz_a[rt] = mul(lz_a[rt], val);
+    int val2 = mul(val, val), val3 = mul(val, val2);
+    sum[rt][1] = mul(sum[rt][1], val);
+    sum[rt][2] = mul(sum[rt][2], val2);
+    sum[rt][3] = mul(sum[rt][3], val3);
+}
+inline void Set(int rt, int val) {
+    lz_a[rt] = 0; lz_m[rt] = 1;
+    lz_s[rt] = val;
+    int val2 = mul(val, val), val3 = mul(val, val2);
+    sum[rt][1] = mul(sz[rt], val);
+    sum[rt][2] = mul(sz[rt], val2);
+    sum[rt][3] = mul(sz[rt], val3);
+}
+void PushUp(int rt) {
+    rep(i, 1, 4) sum[rt][i] = add(sum[rt<<1][i], sum[rt<<1|1][i]);
+}
+inline void PushDown(int rt) {
+    if (lz_s[rt]) {
+        Set(rt << 1, lz_s[rt]);
+        Set(rt << 1 | 1, lz_s[rt]);
+        lz_s[rt] = 0;
+    }
+    if (lz_m[rt] != 1) {
+        Mul(rt << 1, lz_m[rt]);
+        Mul(rt << 1 | 1, lz_m[rt]);
+        lz_m[rt] = 1;
+    }
+    if (lz_a[rt]) {
+        Add(rt << 1, lz_a[rt]);
+        Add(rt << 1 | 1, lz_a[rt]);
+        lz_a[rt] = 0;
+    }
+}
+void build(int l, int r, int rt) {
+    lz_a[rt] = lz_s[rt] = 0; lz_m[rt] = 1;
+    rep(i, 1, 4) sum[rt][i] = 0;
+    sz[rt] = r - l + 1;
+    if (l == r) return ;
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    PushUp(rt);
+}
+void update(int op, int L, int R, int val, int l, int r, int rt) {
+    if (L <= l && r <= R) {
+        if (op == 1) Add(rt, val);
+        else if (op == 2) Mul(rt, val);
+        else Set(rt, val);
+        return ;
+    }
+    PushDown(rt);
+    int m = (l + r) >> 1;
+    if (L <= m) update(op, L, R, val, lson);
+    if (m < R) update(op, L, R, val, rson);
+    PushUp(rt);
+}
+int query(int L, int R, int p, int l, int r, int rt) {
+    if (L <= l && r <= R) {
+        return sum[rt][p];
+    }
+    PushDown(rt);
+    int m = (l + r) >> 1;
+    int ret = 0;
+    if (L <= m) ret = add(ret, query(L, R, p, lson));
+    if (m < R) ret = add(ret, query(L, R, p, rson));
+    return ret;
+}
+
 //  扫描线(面积2次、3次交)
 inline void push_up(int l,int r,int rt)
 {
