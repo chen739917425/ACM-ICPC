@@ -10,11 +10,11 @@ void build(int* a,int n){
 			continue;
 		}
 		int lca=LCA(u,s[top]);
-		// ÅÐ¶Ï lca Óë s[top-1]µÄÎ»ÖÃ¹ØÏµ 
-		while (top>1&&dfn[s[top-1]]>=dfn[lca])	// lcaÊÇs[top-1] »ò ²»ÔÚs[top-1]µÄ×ÓÊ÷ÄÚ, s[top-1] -> s[top]
+		// åˆ¤æ–­ lca ä¸Ž s[top-1]çš„ä½ç½®å…³ç³» 
+		while (top>1&&dfn[s[top-1]]>=dfn[lca])	// lcaæ˜¯s[top-1] æˆ– ä¸åœ¨s[top-1]çš„å­æ ‘å†…, s[top-1] -> s[top]
 			G[s[top-1]].pb(s[top]),--top;
-		// ´ËÊ± lca ½éÓÚ s[top-1] Óë s[top] Ö®¼ä 
-		if (lca!=s[top])						// Èô lca ²»ÊÇ s[top], lca -> s[top], s[top] Ìæ»»Îª lca 
+		// æ­¤æ—¶ lca ä»‹äºŽ s[top-1] ä¸Ž s[top] ä¹‹é—´ 
+		if (lca!=s[top])						// è‹¥ lca ä¸æ˜¯ s[top], lca -> s[top], s[top] æ›¿æ¢ä¸º lca 
 			G[lca].pb(s[top]),s[top]=lca;
 		s[++top]=u;
 	}
