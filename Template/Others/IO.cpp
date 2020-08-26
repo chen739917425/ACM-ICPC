@@ -18,6 +18,9 @@ struct FastIO {
     }
     inline int xint() {
         int c = xchar(), x = 0, s = 1;
+        /*
+        if (c==-1){return -1;}	//读到文件尾时返回 -1 
+        */
         while (c <= 32) c = xchar();
         if (c == '-') s = -1, c = xchar();
         for (; '0' <= c && c <= '9'; c = xchar()) x = x * 10 + c - '0';
