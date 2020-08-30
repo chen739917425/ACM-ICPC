@@ -106,7 +106,7 @@ int pre(int x,int v)
 		return pre(t[x].ch[0],v);
 	return max(pre(t[x].ch[1],v),t[x].v);
 }
-P suc(int x,int v)
+int suc(int x,int v)
 {
 	if (!x)
 		return -1;
