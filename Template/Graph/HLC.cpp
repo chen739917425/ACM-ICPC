@@ -1,4 +1,4 @@
-int root,tot,son[maxn],id[maxn],rk[maxn],top[maxn],sz[maxn],dep[maxn],f[maxn];
+int root,tot,son[maxn],dfn[maxn],id[maxn],top[maxn],sz[maxn],dep[maxn],f[maxn];
 void dfs1(int fa,int u)
 {
     f[u]=fa;
@@ -18,8 +18,8 @@ void dfs1(int fa,int u)
 void dfs2(int u,int t)
 {
     top[u]=t;
-    id[u]=++tot;
-    rk[tot]=u;
+    dfn[u]=++tot;
+    id[tot]=u;
     if (!son[u])
         return;
     dfs2(son[u],t);
@@ -35,7 +35,7 @@ void build(int l,int r,int rt)
 {
     if (l==r)
     {
-        sum[rt]=g[rk[l]];
+        sum[rt]=g[id[l]];
         return;
     }
     int m=(l+r)>>1;
@@ -75,22 +75,22 @@ void upd_path(int x,int y,int z)
 {
     while (top[x]!=top[y]){
         if (dep[top[x]]<dep[top[y]]) swap(x,y);
-        upd(id[top[x]],id[x],z,1,tot,1);
+        upd(dfn[top[x]],dfn[x],z,1,tot,1);
         x=f[top[x]];
     }
-    if (id[x]<id[y]) swap(x,y);
-    upd(id[y],id[x],z,1,tot,1);
+    if (dfn[x]<dfn[y]) swap(x,y);
+    upd(dfn[y],dfn[x],z,1,tot,1);
 }
 int qry_path(int x,int y)
 {
     int res=0;
     while (top[x]!=top[y]){
         if (dep[top[x]]<dep[top[y]]) swap(x,y);
-        res+=qry(id[top[x]],id[x],0,1,tot,1);
+        res+=qry(dfn[top[x]],dfn[x],0,1,tot,1);
         x=f[top[x]];
     }
-    if (id[x]<id[y]) swap(x,y);
-    res+=qry(id[y],id[x],0,1,tot,1);
+    if (dfn[x]<dfn[y]) swap(x,y);
+    res+=qry(dfn[y],dfn[x],0,1,tot,1);
     return res;
 }
 int main()
@@ -126,12 +126,12 @@ int main()
         else if (op==3) //  子树修改 
         {
             scanf("%d%d",&x,&z);
-            upd(id[x],id[x]+sz[x]-1,z,1,tot,1);
+            upd(dfn[x],dfn[x]+sz[x]-1,z,1,tot,1);
         }
         else //  子树求和 
         {
             scanf("%d",&x);
-            printf("%d\n",qry(id[x],id[x]+sz[x]-1,0,1,tot,1));
+            printf("%d\n",qry(dfn[x],dfn[x]+sz[x]-1,0,1,tot,1));
         }
     }
     return 0;
