@@ -21,7 +21,7 @@ void getrt(int u,int fa,int sum){	// 获取重心
 void getpath(int u,int fa,...){		// 获取路径
 	for (auto v:e[u])	
 		if (v!=fa&&!vis[v])	
-			getdis(v,u,...);
+			getpath(v,u,...);
 }
 inline ll cal(int u,int val){		// val用于容斥时还原路径
 	getpath(u,0,...);				
