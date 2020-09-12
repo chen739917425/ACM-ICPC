@@ -42,3 +42,48 @@ void dfs(int u){
 		dfs(rt);
 	}
 }
+/*
+	非容斥写法,对于子树一边统计一边合并,更通用
+*/
+int buf[maxn];
+vector<int> t;
+void getpath(int u,int fa,int w,int ty){
+	if (ty==1)	t.pb(w);
+	else	buf[w]=0;
+	for (int i=head[u];i;i=e[i].ne){
+		int v=e[i].v;
+		if (vis[v]||fa==v)	continue;
+		getpath(v,u,w+1,ty);
+	}
+}
+inline void cal(int u){
+	buf[0]++;
+	for (int i=head[u];i;i=e[i].ne){
+		int v=e[i].v;
+		if (vis[v])	continue;
+		t.clear();
+		getpath(v,u,1,1);
+		// 统计
+		for (auto j:t)
+			if (k>=j)
+				ans+=buf[k-j];
+		// 合并
+		for (auto j:t)
+			buf[j]++;
+	}
+	// 清空
+	buf[0]=0;
+	for (int i=head[u];i;i=e[i].ne)
+		if (!vis[e[i].v])	getpath(e[i].v,u,1,-1);
+}
+void dfs(int u){
+	cal(u);
+	vis[u]=1;
+	for (int i=head[u];i;i=e[i].ne){
+		int v=e[i].v;
+		if (vis[v])	continue;
+		mx=INF;
+		getrt(v,u,sz[v]);
+		dfs(rt);
+	}
+}
