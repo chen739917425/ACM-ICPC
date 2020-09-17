@@ -61,3 +61,17 @@ F cal(ll n, ll a, ll b, ll c) {
 	r.h = add(add(add( mul(mul(n,m),m+1), -mul(2,t.g)), -mul(2,t.f)), -r.f);
 	return r;
 }
+//只求f时的精简版
+ll f(ll n,ll a,ll b,ll c){
+	if (!a)
+		return b/c*(n+1);
+	if (a>=c||b>=c){
+		ll res=n*(n+1)/2*(a/c)+b/c*(n+1);
+		res+=f(n,a%c,b%c,c);
+		return res;
+	}
+	ll m=(a*n+b)/c;
+	ll t=f(m-1,c,c-b-1,a);
+	ll res=n*m-t;
+	return res;
+}
