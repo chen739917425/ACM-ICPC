@@ -3,24 +3,48 @@
 struct LCT{
 	const static int N=3e5+10;
 	struct node{
-		int f,c[2],v,s;
+		int f,c[2],v,s,sz;
 	}tr[N];
-	int stk[N],r[N];	// r为翻转标记 
-//	inline void init(int n){	多组测试时记得初始化 
-//		for (int i=1;i<=n;++i)
-//			tr[i].f=tr[i].c[0]=tr[i].c[1]=tr[i].v=tr[i].s=r[i]=0;
-//	}
+	int stk[N],r[N],alz[N],mlz[N];	// r为翻转标记, alz为加标记, mlz为乘标记 
+	inline void init(int n){	//按需初始化 
+		for (int i=1;i<=n;++i){
+			tr[i].f=tr[i].c[0]=tr[i].c[1]=r[i]=alz[i]=0;
+			tr[i].v=tr[i].s=tr[i].sz=mlz[i]=1;
+		}
+	}
 	inline bool nrt(int x){		// x是否非splay的根 
 		return tr[tr[x].f].c[0]==x||tr[tr[x].f].c[1]==x;
 	}
 	inline void pushup(int x){
-		tr[x].s=tr[ls].s^tr[rs].s^tr[x].v;
+		tr[x].sz=tr[ls].sz+tr[rs].sz+1;
+		tr[x].s=add(add(tr[ls].s,tr[rs].s),tr[x].v);
 	}
 	inline void rev(int x){swap(ls,rs);r[x]^=1;}
+	inline void A(int x,int c){
+		tr[x].v=add(tr[x].v,c);
+		tr[x].s=add(tr[x].s,mul(c,tr[x].sz));
+		alz[x]=add(alz[x],c);
+	}
+	inline void M(int x,int c){
+		tr[x].v=mul(tr[x].v,c);
+		tr[x].s=mul(tr[x].s,c);
+		alz[x]=mul(alz[x],c);
+		mlz[x]=mul(mlz[x],c);
+	}
 	inline void pushdown(int x){
+		if (mlz[x]!=1){
+			if (ls)	M(ls,mlz[x]);
+			if (rs)	M(rs,mlz[x]);
+			mlz[x]=1;
+		}
+		if (alz[x]){
+			if (ls)	A(ls,alz[x]);
+			if (rs)	A(rs,alz[x]);
+			alz[x]=0;
+		}
 		if(r[x]){
-			if(ls)rev(ls);
-			if(rs)rev(rs);
+			if(ls)	rev(ls);
+			if(rs)	rev(rs);
 			r[x]=0;
 		}
 	}
