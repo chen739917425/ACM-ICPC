@@ -1,9 +1,9 @@
+/*	
+	å¦‚æœæœ‰å‘ä¸Šåˆå¹¶çš„å±æ€§
+	è‹¥è¦æ›´æ–°èŠ‚ç‚¹çš„æ­¤ç±»å±æ€§ï¼Œéœ€è¦å…ˆå°†è¯¥èŠ‚ç‚¹åˆ†è£‚å‡ºæ¥ï¼Œå†æ‰‹åŠ¨æ›´æ–°æ‰€æœ‰ä¸æ­¤ç›¸å…³çš„ä¿¡æ¯ï¼Œä¸è¦é—æ¼ï¼ï¼
+	ç„¶åå†åˆå¹¶å›å»
+*/
 struct node{
-	/*	
-		Èç¹ûÓĞÏòÉÏºÏ²¢µÄÊôĞÔ
-		ÈôÒª¸üĞÂ½ÚµãµÄ´ËÀàÊôĞÔ£¬ĞèÒªÏÈ½«¸Ã½Úµã·ÖÁÑ³öÀ´£¬ÔÙÊÖ¶¯¸üĞÂËùÓĞÓë´ËÏà¹ØµÄĞÅÏ¢£¬²»ÒªÒÅÂ©£¡£¡
-		È»ºóÔÙºÏ²¢»ØÈ¥
-	*/
 	int ls,rs,sz,val,pr;
 	int lz;
 }tr[maxn];
@@ -19,14 +19,14 @@ inline void pushup(int u){
 	tr[u].sz=tr[tr[u].ls].sz+tr[tr[u].rs].sz+1;
 }
 inline void pushdw(int u){
-	//·­×ª±ê¼ÇµÄÏÂ´« 
+	//ç¿»è½¬æ ‡è®°çš„ä¸‹ä¼  
 	if (tr[u].lz){
 		swap(tr[u].ls,tr[u].rs);
 		tr[tr[u].ls].lz^=1;
 		tr[tr[u].rs].lz^=1;
 		tr[u].lz=0;
 	}
-	//¼Ó±ê¼ÇµÄÏÂ´«
+	//åŠ æ ‡è®°çš„ä¸‹ä¼ 
 	if (tr[u].lz){
 		if (tr[u].ls){
 			tr[tr[u].ls].val+=tr[u].lz;
@@ -39,18 +39,33 @@ inline void pushdw(int u){
 		tr[u].lz=0;
 	}	 
 }
-void split(int u,int k,int& x,int& y){
+//æŒ‰èŠ‚ç‚¹æ•°åˆ†è£‚
+void split(int u,int k,int& x,int& y){	
 	if (!u){
 		x=y=0;
 		return;
 	}
 	pushdw(u);
-	if (tr[tr[u].ls].sz+1<=k)	// °´½ÚµãÊı·ÖÁÑ, Èô°´¼üÖµkey·ÖÁÑÔòÎª tr[u].val <= key 
+	if (tr[tr[u].ls].sz+1<=k)
 		x=u, split(tr[u].rs,k-tr[tr[u].ls].sz-1,tr[u].rs,y);
 	else
 		y=u, split(tr[u].ls,k,x,tr[u].ls);
 	pushup(u);
 }
+//æŒ‰é”®å€¼åˆ†è£‚
+void split(int u,int k,int& x,int& y){	
+	if (!u){
+		x=y=0;
+		return;
+	}
+	pushdw(u);
+	if (tr[u].val<=k)
+		x=u, split(tr[u].rs,k,tr[u].rs,y);
+	else
+		y=u, split(tr[u].ls,k,x,tr[u].ls);
+	pushup(u);
+}
+//åˆå¹¶
 int merge(int x,int y){
 	if (!x||!y)	return x+y;
 	if (tr[x].pr<=tr[y].pr){
@@ -64,7 +79,8 @@ int merge(int x,int y){
 	pushup(y);
 	return y;
 }
-inline void upd(int& u,int l,int r,int c){ //¶ÔÇø¼ä [l, r] ¼Ó²Ù×÷, Çø¼äÎªÊıÖµÇø¼ä»òÕßĞòÁĞÇø¼ä, È¡¾öÓÚ split() µÄ·ÖÁÑ·½·¨ 
+//å¯¹åŒºé—´ [l, r] åŠ æ“ä½œ, åŒºé—´ä¸ºæ•°å€¼åŒºé—´æˆ–è€…åºåˆ—åŒºé—´, å–å†³äº split() çš„åˆ†è£‚æ–¹æ³• 
+inline void upd(int& u,int l,int r,int c){ 
 	int x,y,z;
 	split(u,r,y,z);
 	split(y,l-1,x,y);
@@ -72,24 +88,21 @@ inline void upd(int& u,int l,int r,int c){ //¶ÔÇø¼ä [l, r] ¼Ó²Ù×÷, Çø¼äÎªÊıÖµÇø¼
 	tr[y].lz+=c;
 	u=merge(merge(x,y),z);
 }
-inline void ins(int& root,int u){
-	int x,y;
-	split(root,tr[u].val,x,y);
-	root=merge(merge(x,u),y);
-}
-int build(int* a,int n){	// ÒÔ a[i] Îª¼üÖµ, ¶ÔÊı×é a ½¨Ê÷, Êı×é a ÏÂ±ê´Ó 1 ¿ªÊ¼ 
-	idx=0;
-	int rt;
-	for (int i=1;i<=n;++i)
-		ins(rt,newnode(a[i]));
-	return rt;
+// æŸ¥è¯¢æœ€é å³çš„å°äºcçš„æ•°çš„ä½ç½®, å…¶ä½™åŒç±»æŸ¥è¯¢ç±»æ¨
+int qry(int u,int c){
+	int ls=tr[u].ls,rs=tr[u].rs;
+	if (tr[rs].mn<c)	return tr[ls].sz+1+qry(rs,c);
+	if (tr[u].val<c)	return tr[ls].sz+1;
+	if (tr[ls].mn<c)	return qry(ls,c);
+	return -1;
 }
 /*
-ÈôÊ÷ÉÏÃ¿¸ö½Úµã´ú±íµÄÊÇÒ»¶ÎÇø¼ä
-¿ÉÈçÏÂ·â×°ÊµÏÖÇ¡ºÃÎª kµÄ·ÖÁÑ
-ËùµÃ x ¼´ k³¤¶ÈµÄĞòÁĞÇ°×º¶ÔÓ¦µÄ×ÓÊ÷ 
-cnt Îª¸Ã½ÚµãµÄÇø¼ä³¤¶È
-len Îª¸Ã½ÚµãÎª¸ùµÄ×ÓÊ÷µÄÇø¼ä³¤¶È 
+è‹¥æ ‘ä¸Šæ¯ä¸ªèŠ‚ç‚¹ä»£è¡¨çš„æ˜¯ä¸€æ®µåŒºé—´
+å¯å¦‚ä¸‹å°è£…å®ç°æ°å¥½ä¸º kçš„åˆ†è£‚
+æ‰€å¾— x å³ ké•¿åº¦çš„åºåˆ—å‰ç¼€å¯¹åº”çš„å­æ ‘ 
+cnt ä¸ºè¯¥èŠ‚ç‚¹çš„åŒºé—´é•¿åº¦
+len ä¸ºè¯¥èŠ‚ç‚¹ä¸ºæ ¹çš„å­æ ‘çš„åŒºé—´é•¿åº¦ 
+*/
 void split(int u,int k,int& x,int& y,int ty){
 	if (!u){
 		x=0,y=0;
@@ -113,8 +126,20 @@ void Split(int root,int k,int& x,int& y){
 		y=merge(y,z);
 	}
 } 
-
-O(n)½¨Ê÷, Ğè±£Ö¤Êı×é a ÒÑ¾­ÓĞĞò 
+/* ä»¥ a[i] ä¸ºé”®å€¼, å¯¹æ•°ç»„ a å»ºæ ‘, æ•°ç»„ a ä¸‹æ ‡ä» 1 å¼€å§‹ */
+inline void ins(int& root,int u){
+	int x,y;
+	split(root,tr[u].val,x,y);
+	root=merge(merge(x,u),y);
+}
+int build(int* a,int n){	
+	idx=0;
+	int rt=0;
+	for (int i=1;i<=n;++i)
+		ins(rt,newnode(a[i]));
+	return rt;
+}
+/* O(n)å»ºæ ‘, éœ€ä¿è¯æ•°ç»„ a å·²ç»æœ‰åº */
 int stk[maxn],top; 
 void upd(int u){
 	if (tr[u].ls)	upd(tr[u].ls);
@@ -122,7 +147,7 @@ void upd(int u){
 	pushup(u);
 }
 void build(int* a,int n){
-	top=0;
+	idx=top=0;
 	for (int i=1;i<=n;++i){
 		int u=newnode(a[i]);
 		int t=top;
@@ -137,8 +162,8 @@ void build(int* a,int n){
 	upd(stk[1]);
 	return stk[1];
 }
-*/
-// ¿É³Ö¾Ã»¯²Ù×÷ 
+
+/* å¯æŒä¹…åŒ–æ“ä½œ */
 void split(int u,int k,int& x,int& y){
 	if (!u){
 		x=y=0;
@@ -170,7 +195,10 @@ int merge(int x,int y){
 	pushup(p);
 	return p;
 }
-void ins(int& root,int c){
+// rt[now]=rt[pre];
+// ins(rt[now],c);del(rt[now],c);
+// nowä¸ºå½“å‰ç‰ˆæœ¬å·,preä¸ºå½“å‰æ“ä½œè¦åŸºäºçš„å†å²ç‰ˆæœ¬å·
+void ins(int& root,int c){		
 	int x,y;
 	split(root,c,x,y);
 	root=merge(merge(x,newnode(c)),y);
@@ -181,4 +209,33 @@ void del(int& root,int c){
 	split(y,c-1,x,y);
 	y=merge(tr[y].ls,tr[y].rs);
 	root=merge(merge(x,y),z);
+}
+/* å¹³è¡¡æ ‘ç›¸å…³æ“ä½œ */
+int Rank(int& root,int c){	// æ±‚cçš„æ’å,å³æ¯”æ•°å­—cå°çš„æ•°å­—ä¸ªæ•°+1
+	int x,y;
+	split(root,c-1,x,y);
+	int rk=tr[x].sz+1;
+	root=merge(x,y);
+	return rk;
+}
+int Kth(int u,int k){		// æ±‚æ’åç¬¬kçš„æ•°å­—
+	if (tr[tr[u].ls].sz+1==k)	return tr[u].val;
+	if (k<=tr[tr[u].ls].sz)	return Kth(tr[u].ls,k);
+	return Kth(tr[u].rs,k-tr[tr[u].ls].sz-1);
+}
+int Pre(int& root,int c){	// æ±‚cçš„å‰é©±
+	int x,y;
+	split(root,c-1,x,y);
+	if (!x)	return -2147483647;
+	int ans=Kth(x,tr[x].sz);
+	root=merge(x,y);
+	return ans;
+}
+int Suc(int& root,int c){	// æ±‚cçš„åç»§
+	int x,y;
+	split(root,c,x,y);
+	if (!y)	return 2147483647;
+	int ans=Kth(y,1);
+	root=merge(x,y);
+	return ans;
 }
