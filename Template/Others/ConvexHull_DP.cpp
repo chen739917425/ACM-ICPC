@@ -30,13 +30,13 @@ for (int i=k;i<=n;++i)
     f[i]=getf(q[h],i);
 } 
 // 有 m 分组数限制
-for (int i=1;i<=m;++i)
+for (int i=1;i<=n;++i)
 	f[1][i]=getf(0,i,1);
 for (int k=2;k<=m;++k)
 {
 	h=t=0;
 	q[0]=k-1;
-	for (int j=k;j<=m;++j)
+	for (int j=k;j<=n;++j)
 	{
 		while (h<t&&dy(q[h+1],q[h],k-1)<=K*dx(q[h+1],q[h]))
 			++h;

@@ -1,54 +1,45 @@
-struct edge{
-	int ne,v,w;
-}e[maxn<<1];
-int head[maxn],cnt=1;
-void add(int u,int v,int w){
-	e[++cnt].ne=head[u];
-	e[cnt].v=v;e[cnt].w=w;
-	head[u]=cnt;
-	e[++cnt].ne=head[v];
-	e[cnt].v=u;e[cnt].w=0;
-	head[v]=cnt;
-}
-int d[maxn];
-queue<int> q;
-bool bfs(int s,int t){
-	memset(d,0,sizeof(d));
-	while (sz(q)) q.pop();
-	q.push(s);d[s]=1;
-	while (sz(q)){
-		int u=q.front();q.pop();
-		for (int i=head[u];i;i=e[i].ne){
-			int v=e[i].v,w=e[i].w;
-			if (w&&!d[v]){
-				q.push(v);
-				d[v]=d[u]+1;
-				if (v==t) return 1;
-			}
-		}
-	}
-	return 0;
-}
-int dfs(int u,int t,int flow){
-	if (u==t)
-		return flow;
-	int rest=flow,k;
-	for (int i=head[u];i;i=e[i].ne){
-		int v=e[i].v;
-		if (e[i].w&&d[v]==d[u]+1){
-			k=dfs(v,t,min(rest,e[i].w));
-			if (!k) d[v]=0;
-			e[i].w-=k;
-			e[i^1].w+=k;
-			rest-=k;
-		}
-	}
-	return flow-rest;
-}
-int dinic(int s,int t){
-	int flow=0,mxf=0;
-	while (bfs(s,t))
-		while (flow=dfs(s,t,INF))
-			mxf+=flow;
-	return mxf;
-}
+// [0,n) init!! 
+// double need eps  
+template<class T>
+struct Dinic{
+    const static int N = 10101 , M = N * 10;
+    int s , t , n , h[N] , cur[N] , lv[N] , q[N] , id , ne[M] , to[M];
+    T cap[M] , flow;
+    void add(int u,int v,T w){ to[id]=v; ne[id]=h[u]; cap[id]=w; h[u]=id++;}
+    void link(int u,int v,T w){ add(u, v, w);add(v, u, 0);}
+    void init(int _n = N) { fill(h, h + (n=_n), -1);id = 0;}
+    bool bfs(){
+        int L = 0 , R = 0;
+        fill(lv, lv+n, -1);
+        lv[ q[R++]=s ] = 0;
+        while(L<R && !~lv[t]){
+            int c = q[L++];
+            for(int k = h[c]; ~k; k = ne[k])
+                if(cap[k] > 0 && !~lv[to[k]]) 
+                    lv[ q[R++]=to[k] ] = lv[c] + 1;
+        }
+        return ~lv[t];
+    }
+    T dfs(int c,T mx){
+        if(c == t) return mx;
+        T ret = 0;
+        for(int &k = cur[c]; ~k; k = ne[k]){
+            if(lv[to[k]] == lv[c] + 1 && cap[k] > 0){
+                T flow = dfs(to[k] , min(mx, cap[k]));
+                ret += flow;cap[k] -= flow, cap[k^1] += flow;mx -= flow;
+                if(!mx) return ret;
+            }
+        }
+        lv[c] = -1;
+        return ret;
+    }
+    T run(int _s,int _t){
+        s = _s , t = _t;
+        flow = 0;
+        while(bfs()){
+            copy(h, h + n, cur);
+            flow += dfs(s, ~0U>>1);
+        }
+        return flow;
+    }
+};
