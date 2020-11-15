@@ -1,4 +1,8 @@
 /*
+	多组样例注意初始化：
+	dfn[],head[],tim,num,cnt,cut[],bridge[],vector<>
+*/
+/*
 	有向图强连通分量scc
 	for (i=1;i<=n;++i)
 		if (!dfn[i]) tarjan(i);
