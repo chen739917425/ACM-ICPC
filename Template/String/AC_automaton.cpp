@@ -38,37 +38,28 @@ struct Trie
 		v.pb(rt);
 		for (int i=0;i<v.size();++i)
 		{
-			int c=v[i];
+			int u=v[i];
 			for (int j=0;j<M;++j)
 			{
-				if (ne[c][j])
+				if (ne[u][j])
 				{
-					v.pb(ne[c][j]);
-					fail[ne[c][j]]=ne[fail[c]][j];
+					v.pb(ne[u][j]);
+					fail[ne[u][j]]=ne[fail[u]][j];
 				}
 				else
-					ne[c][j]=ne[fail[c]][j];
+					ne[u][j]=ne[fail[u]][j];
 			}
+			cnt[u]+=cnt[fail[u]];
 		}
 	}
 	void ac_auto(char* s)
 	{
-		int p=rt;
+		int p=rt,sum=0;
 		for (int i=0;s[i];++i)
 		{
 			int c=s[i]-'a';
-			while (!ne[p][c]&&p)
-				p=fail[p];
-			int tmp=p=ne[p][c];
-			while (tmp)
-			{
-				if (cnt[tmp]!=-1)//if macth,do... 
-				{
-					
-					cnt[tmp]=-1;
-				} 
-				tmp=fail[tmp];
-			}
+			p=ne[p][c];
+			sum+=cnt[p];
 		}
 	}
 }trie;
