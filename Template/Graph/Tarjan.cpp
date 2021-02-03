@@ -142,3 +142,13 @@ void build(){
 			else
 				sz[i]++;
 }
+/*
+	构建圆方树
+	每个点双对应一个方点，向该点双内的所有点(即圆点)连边
+	对方点赋新编号，故新图空间要开 2 倍
+*/
+void build(int n){
+	for (int i=1;i<=num;++i)
+		for (auto j:dcc[i])
+			E[n+i].pb(j),E[j].pb(n+i);
+}

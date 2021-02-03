@@ -1,3 +1,59 @@
+/*
+	普通莫队
+	块大小取 n / m^1/2, 复杂度 n*m^1/2
+	带修莫队
+	块大小取 (n*m)^1/3, 复杂度 (n^4*m)^1/3
+*/
+//带修莫队
+int bl[maxn],B;
+struct Q{
+	int l,r,k,tim,id;
+	Q(int _l,int _r,int _k,int _t,int _id):l(_l),r(_r),k(_k),tim(_t),id(_id){} 
+	bool operator <(const Q& t)const{
+		if (bl[l]^bl[t.l])	return l<t.l;
+		if (bl[r]^bl[t.r])	return r<t.r;
+		return tim<t.tim;
+	}	
+};
+vector<Q> qry;
+vector<P> chg;
+void Mo(int n,int m){
+	init();
+	B=pow(1.0*n*m,1.0/3);
+	for (int i=1;i<=n;++i)	bl[i]=i/B;
+	sort(All(qry));
+	int l=1,r=0,t=-1;
+	for (auto i:qry){
+		while (l>i.l)	Add(a[--l]);
+		while (r<i.r)	Add(a[++r]);
+		while (l<i.l)	Del(a[l++]);
+		while (r>i.r)	Del(a[r--]);
+		while (t<i.tim)	upd(l,r,++t);
+		while (t>i.tim)	upd(l,r,t--);
+		ans[i.id]=cal(i.k);
+	}
+}
+int main()
+{
+	int n,m;
+	cin>>n>>m;
+	for (int i=1;i<=n;++i)	scanf("%d",&a[i]);
+	for (int i=1;i<=m;++i){
+		int op,x,y,k;
+		scanf("%d%d%d",&op,&x,&y);
+		if (op==1){
+			scanf("%d",&k);
+			qry.pb(Q(x,y,k,sz(chg)-1,i));
+		}
+		else
+			chg.pb(mp(x,y));
+	}
+	memset(ans,INF,sizeof(ans));
+	Mo(n,m);
+	for (int i=1;i<=m;++i)
+		if (ans[i]!=INF)	printf("%d\n",ans[i]); 
+	return 0;
+}
 //树上莫队
 int bs=450,bl[maxn<<1];		
 int fa[maxn][25],dep[maxn],st[maxn],ed[maxn],ver[maxn<<1],tim;
