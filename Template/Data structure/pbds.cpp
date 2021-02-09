@@ -1,26 +1,26 @@
-// ¹şÏ£±í 
+// å“ˆå¸Œè¡¨ 
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/hash_policy.hpp>
 using namespace __gnu_pbds;
-cc_hash_table<string,int> mp1;//À­Á´·¨ (²»ÈİÒ×±»¿¨ ) 
-gp_hash_table<string,int> mp2;//²éÌ½·¨
-// Æ½ºâÊ÷ 
+cc_hash_table<string,int> mp1;//æ‹‰é“¾æ³• (ä¸å®¹æ˜“è¢«å¡ ) 
+gp_hash_table<string,int> mp2;//æŸ¥æ¢æ³•
+// å¹³è¡¡æ ‘ 
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> t;
 /*
-µÚÒ»¸ö²ÎÊı´ú±íkeyµÄÀàĞÍ
-µÚ¶ş¸ö²ÎÊı±íÊ¾valueµÄÀàĞÍ.ÕâÀï²»ĞèÒªÓ³ÉäÖµ,Ò²¾ÍÌînull_type.ÔÚÀÏ°æ±¾G++ÖĞÕâ¸öĞèÒªÌæ»»Îªnull_mapped_type£¨ÈçBZOJ£©.
-µÚÈı¸ö²ÎÊı±íÊ¾keyµÄÅÅĞò·½Ê½,´ÓĞ¡µ½´ó
-µÚËÄ¸ö²ÎÊı±íÊ¾Ê¹ÓÃÄÄÖÖÊı¾İ½á¹¹,rb_tree_tag±íÊ¾ºìºÚÊ÷
-µÚÎå¸ö²ÎÊı±íÊ¾ÈçºÎ¸üĞÂ±£´æ½ÚµãĞÅÏ¢,ÌîĞ´tree_order_statistics_node_update»á¶îÍâ»ñµÃorder_of_key()ºÍfind_by_order()Á½¸ö¹¦ÄÜ
-²åÈë:	t.insert()
-É¾³ı:	t.erase()
-ÇókÔÚÊ÷ÖĞÊÇµÚ¼¸´ó:	t.order_of_key();
-ÇóÊ÷ÖĞµÄµÚk´ó:		t.find_by_order();
->=xµÄminµÄµü´úÆ÷:	t.lower_bound();
->xµÄminµÄµü´úÆ÷:	t.upper_bound();
-b²¢Èëa Ç°ÌáÊÇÁ½¿ÃÊ÷µÄ key µÄÈ¡Öµ·¶Î§²»Ïà½»:	a.join(b)
-keyĞ¡ÓÚµÈÓÚvµÄÔªËØÊôÓÚa£¬ÆäÓàµÄÊôÓÚb:		a.split(v,b)
+ç¬¬ä¸€ä¸ªå‚æ•°ä»£è¡¨keyçš„ç±»å‹
+ç¬¬äºŒä¸ªå‚æ•°è¡¨ç¤ºvalueçš„ç±»å‹.è¿™é‡Œä¸éœ€è¦æ˜ å°„å€¼,ä¹Ÿå°±å¡«null_type.åœ¨è€ç‰ˆæœ¬G++ä¸­è¿™ä¸ªéœ€è¦æ›¿æ¢ä¸ºnull_mapped_typeï¼ˆå¦‚BZOJï¼‰.
+ç¬¬ä¸‰ä¸ªå‚æ•°è¡¨ç¤ºkeyçš„æ’åºæ–¹å¼,ä»å°åˆ°å¤§
+ç¬¬å››ä¸ªå‚æ•°è¡¨ç¤ºä½¿ç”¨å“ªç§æ•°æ®ç»“æ„,rb_tree_tagè¡¨ç¤ºçº¢é»‘æ ‘
+ç¬¬äº”ä¸ªå‚æ•°è¡¨ç¤ºå¦‚ä½•æ›´æ–°ä¿å­˜èŠ‚ç‚¹ä¿¡æ¯,å¡«å†™tree_order_statistics_node_updateä¼šé¢å¤–è·å¾—order_of_key()å’Œfind_by_order()ä¸¤ä¸ªåŠŸèƒ½
+æ’å…¥:	t.insert()
+åˆ é™¤:	t.erase()
+æ±‚kåœ¨æ ‘ä¸­æ˜¯ç¬¬å‡ å¤§:	t.order_of_key();
+æ±‚æ ‘ä¸­çš„ç¬¬kå¤§:		t.find_by_order();
+>=xçš„minçš„è¿­ä»£å™¨:	t.lower_bound();
+>xçš„minçš„è¿­ä»£å™¨:	t.upper_bound();
+bå¹¶å…¥a å‰ææ˜¯ä¸¤æ£µæ ‘çš„ key çš„å–å€¼èŒƒå›´ä¸ç›¸äº¤:	a.join(b)
+keyå°äºç­‰äºvçš„å…ƒç´ å±äºaï¼Œå…¶ä½™çš„å±äºb:		a.split(v,b)
 */
